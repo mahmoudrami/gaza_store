@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     use HasFactory;
+
+    public function products(){
+        return $this->belongsTo(Product::class);
+    }
+
+    public function imageable(){
+        return $this->morphOne(Image::class,'imageable')->where('type', 'main');
+    }
 }
