@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable;
 
@@ -50,7 +50,7 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class)->withDefault();
     }
 
-    public function imageable(){
+    public function image(){
         return $this->morphOne(Image::class,'imageable')->where('type', 'main');
     }
 
@@ -76,5 +76,14 @@ class User extends Authenticatable
 
     public function testionials(){
         return $this->hasMany(Testionial::class);
+    }
+
+    public function getImgPathAttribute(){
+        // dd($this->image);
+        if($this->image){
+            return asset('images/'.$this->image->path);
+        }else{
+            return 'https://ui-avatars.com/api/?background=a0a0a0&name='.$this->name;
+        }
     }
 }
