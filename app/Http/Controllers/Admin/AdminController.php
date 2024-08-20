@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -58,4 +59,17 @@ class AdminController extends Controller
         // return dd($request->all());
         return Hash::check($request->password, Auth::user()->password);
     }
+
+    public function orders(){
+        if(request()->has('id')){
+            $id = request()->id;
+            Auth::user()->notifications->find($id)->markAsRead();
+            return request()->id;
+        }
+
+        return Order::all();
+
+    }
+
+
 }
